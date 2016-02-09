@@ -1,0 +1,33 @@
+/*
+ * Thicket
+ * https://github.com/d-plaindoux/thicket
+ *
+ * Copyright (c) 2015-2016 Didier Plaindoux
+ * Licensed under the LGPL2 license.
+ */
+ 
+module Example.Lambda.Term
+
+import Data
+
+type LambdaTerm {
+    Constant { value : number }
+    Variable { name : string  }
+    Application { 
+        abstraction : LambdaTerm 
+        argument : LambdaTerm 
+    }
+    Abstraction { 
+        variable : string 
+        body : LambdaTerm 
+    }
+}    
+
+class lambdaPrettyPrinter this:LambdaTerm {
+    toString : string
+} {
+    def Constant.toString = this.value toString
+    def Variable.toString = this.name
+    def Application.toString = lambdaPrettyPrinter this.abstraction toString + " " + $ lambdaPrettyPrinter this.argument toString
+    def Abstraction.toString = "(" + this.variable + " -> " + (lambdaPrettyPrinter this.body toString) + ")"
+}

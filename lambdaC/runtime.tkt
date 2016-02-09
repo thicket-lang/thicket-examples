@@ -1,0 +1,32 @@
+/*
+ * Thicket
+ * https://github.com/d-plaindoux/thicket
+ *
+ * Copyright (c) 2015-2016 Didier Plaindoux
+ * Licensed under the LGPL2 license.
+ */
+ 
+module Example.Lambda
+
+import Boot.Core
+
+from Example.Lambda.Parser import decode
+from Example.Lambda.Interpret import *
+
+/**
+ * Some simple examples
+ */
+do {
+    for term  <- {decode "x -> x"}
+        value <- {interpreter term eval newHashmap}
+    yield console.log $ valuePrettyPrinter value toString
+}; {
+    for term  <- {decode "123"}
+        value <- {interpreter term eval newHashmap}
+    yield console.log $ valuePrettyPrinter value toString
+}; {    
+    for term  <- {decode "(x -> x) 123"}
+        value <- {interpreter term eval newHashmap}
+    yield console.log $ valuePrettyPrinter value toString
+}
+return ()

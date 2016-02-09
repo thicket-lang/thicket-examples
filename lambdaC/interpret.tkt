@@ -1,0 +1,54 @@
+/*
+ * Thicket
+ * https://github.com/d-plaindoux/thicket
+ *
+ * Copyright (c) 2015-2016 Didier Plaindoux
+ * Licensed under the LGPL2 license.
+ */
+ 
+module Example.Lambda.Interpret
+
+import Data
+
+from Example.Lambda.Term import *
+
+typedef Environment = Map[string,value]
+
+type Value {
+    CstVal { value : number }
+    Closure {
+        abstraction : string,LambdaTerm
+        environment : Environment
+    }
+}
+
+class value this:Value {
+    fold   : [b] (number -> b) -> ((string,LambdaTerm) -> Environment -> b) -> b
+} {
+    def CstVal.fold s _  = s this.value
+    def Closure.fold _ c = c this.abstraction this.environment
+}
+
+class valuePrettyPrinter this:value {
+    toString : string
+} {
+    def toString = this fold number::toString $ _ _ -> "<function>"
+}
+
+class interpreter this:LambdaTerm {
+    eval : Environment -> try[value]
+} {
+    def Constant.eval env = success $ value $ CstVal this.value
+
+    def Variable.eval env = 
+    	env find this.name fold (failure $ "Unbound variable: " + this.name) success
+                                       
+    def Application.eval env = 
+        for a <- { interpreter this.abstraction eval env }
+            p <- { interpreter this.argument eval env }
+            v <- { a fold (_   -> failure "Waiting for a function") 
+                          (a e -> interpreter a._2 eval $ e add a._1 p) }
+        yield v
+        
+    def Abstraction.eval env = success $ value $ Closure (this.variable,this.body) env    
+}
