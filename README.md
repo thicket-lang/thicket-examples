@@ -33,11 +33,11 @@ This example illustrates a simple lambda calcul interpreter.
 $ ./bin/thicket -i site/
 Thicket v0.1
 > import Examples.Lambda ;;
-> interpreter (Application lIdent $ Constant "C")
-        eval new$map.mapper 
-        map (s -> console.log $ valueClass s pretty) 
+> for term  <- {decode "(x -> x) 123"}
+        value <- {interpreter term eval newHashmap}
+  yield console.log $ valuePrettyPrinter value toString
 ;;
-C
+123
 try[consoleClass] :: <class try>
 >
 ```
