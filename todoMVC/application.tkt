@@ -9,6 +9,7 @@
 module Example.TodoMVC.Application
 
 from Client.Document import *
+from Client.Dom import *
 from Client.Event.Mouse import *
 from Client.Event.Key import *
 from Client.Document.Renderer import *
