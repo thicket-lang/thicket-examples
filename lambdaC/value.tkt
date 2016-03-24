@@ -1,0 +1,38 @@
+/*
+ * Thicket
+ * https://github.com/d-plaindoux/thicket
+ *
+ * Copyright (c) 2015-2016 Didier Plaindoux
+ * Licensed under the LGPL2 license.
+ */
+ 
+module Example.Lambda.Interpret
+
+import Data
+
+from Example.Lambda.Term import *
+
+typedef Environment = Map[string,value]
+
+type Value {
+    CstVal { value : number }
+    Closure {
+        abstraction : string,LambdaTerm
+        environment : Environment
+    }
+}
+
+class value this:Value {
+    fold   : [b] (number -> b) -> ((string,LambdaTerm) -> Environment -> b) -> b
+} {
+    def CstVal.fold s _  = s this.value
+    def Closure.fold _ c = c this.abstraction this.environment
+}
+
+class valueStringify this:value {
+    toString : string
+} {
+    def toString = this fold number::toString $ _ _ -> "<function>"
+}
+
+def adapter value2string = value -> string = v -> { valueStringify v toString }

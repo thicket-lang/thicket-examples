@@ -11,29 +11,7 @@ module Example.Lambda.Interpret
 import Data
 
 from Example.Lambda.Term import *
-
-typedef Environment = Map[string,value]
-
-type Value {
-    CstVal { value : number }
-    Closure {
-        abstraction : string,LambdaTerm
-        environment : Environment
-    }
-}
-
-class value this:Value {
-    fold   : [b] (number -> b) -> ((string,LambdaTerm) -> Environment -> b) -> b
-} {
-    def CstVal.fold s _  = s this.value
-    def Closure.fold _ c = c this.abstraction this.environment
-}
-
-class valuePrettyPrinter this:value {
-    toString : string
-} {
-    def toString = this fold number::toString $ _ _ -> "<function>"
-}
+from Example.Lambda.Value import *
 
 class interpreter this:LambdaTerm {
     eval : Environment -> try[value]
@@ -52,3 +30,5 @@ class interpreter this:LambdaTerm {
         
     def Abstraction.eval env = success $ value $ Closure (this.variable,this.body) env    
 }
+
+def interpret : LambdaTerm -> try[value] = term -> { interpreter term eval newHashmap }

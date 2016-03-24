@@ -22,8 +22,8 @@ def termParser : Parser[LambdaTerm,Token] = {
 
 def simpleTermParser : Parser[LambdaTerm,Token] = {
   (tkNumber map Constant)
-| (tkIdent ~ (tkKeyword match "->" ~> termParser ?) map $ p -> p._2 fold (Variable p._1) (Abstraction p._1))
-| ((tkKeyword match "(") ~> termParser <~ (tkKeyword match ")"))
+| (tkIdent ~ (tkKey "->" ~> termParser ?) map $ p -> p._2 fold (Variable p._1) (Abstraction p._1))
+| ((tkKey"(") ~> termParser <~ (tkKey ")"))
 }
 
 def tokenize : string -> try[Sequence[Token]] = {
@@ -33,6 +33,6 @@ def tokenize : string -> try[Sequence[Token]] = {
 
 def decode : string -> try[LambdaTerm] = s -> { 
     for tokens <- { tokenize s }
-        expression <- { termParser <~ eos parse tokens 0 toTry }
-    yield expression
+        term   <- { termParser <~ eos parse tokens 0 toTry }
+    yield term
 }

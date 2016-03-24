@@ -23,11 +23,13 @@ type LambdaTerm {
     }
 }    
 
-class lambdaPrettyPrinter this:LambdaTerm {
+class lambdaStringify this:LambdaTerm {
     toString : string
 } {
-    def Constant.toString = this.value toString
-    def Variable.toString = this.name
-    def Application.toString = lambdaPrettyPrinter this.abstraction toString + " " + $ lambdaPrettyPrinter this.argument toString
-    def Abstraction.toString = "(" + this.variable + " -> " + (lambdaPrettyPrinter this.body toString) + ")"
+    def Constant.toString    = $"$(this.value)"
+    def Variable.toString    = this.name
+    def Application.toString = $"$(this.abstraction) $(this.argument)"
+    def Abstraction.toString = $"($(this.variable) -> $(this.body))"
 }
+
+def adapter lambda2string : LambdaTerm -> string = l -> { lambdaStringify l toString }
