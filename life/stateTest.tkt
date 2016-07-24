@@ -32,6 +32,6 @@ def stateAssertions : TestLogger -> unit = l -> {
         done 
 }              
 
-do
-{ stateAssertions consoleLogger }
-return ()
+do { 
+    stateAssertions consoleLogger 
+} return ()

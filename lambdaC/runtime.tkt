@@ -12,6 +12,7 @@ import Boot.Core
 
 from Example.Lambda.Parser import decode
 from Example.Lambda.Interpret import interpret
+from Example.Lambda.Value import value
 
 /**
  * Some simple examples
@@ -23,9 +24,9 @@ def execute : string -> try[value] = code -> {
     yield value
 }
 
-def executeAndPrint : string -> try[string] = code -> {
+def executeAndPrint : string -> try[consoleClass] = code -> {
     for value <- {execute code}
-    yield console log $ "$(code) = $(value)"
+    yield console log $ $"$(code) = $(value)"
 }
 
 do {
@@ -36,6 +37,9 @@ do {
     recoverWith (e -> console.log $ $"Error: $(e)")
 }; {    
     executeAndPrint "(x -> x) 123"
+    recoverWith (e -> console.log $ $"Error: $(e)")
+}; {    
+    executeAndPrint "(x -> y -> y) 123 456"
     recoverWith (e -> console.log $ $"Error: $(e)")
 }
 return ()

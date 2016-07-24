@@ -6,7 +6,7 @@
  * Licensed under the LGPL2 license.
  */
  
-module Example.Lambda.Interpret
+module Example.Lambda.Value
 
 import Data
 
@@ -35,4 +35,4 @@ class valueStringify this:value {
     def toString = this fold number::toString $ _ _ -> "<function>"
 }
 
-def adapter value2string = value -> string = v -> { valueStringify v toString }
+def adapter value2string : value -> string = v -> { valueStringify v toString }

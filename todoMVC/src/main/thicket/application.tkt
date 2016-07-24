@@ -69,29 +69,21 @@ class application this:controller {
     def filtersView : dom =
         <ul id="filters">
             <li> $
-              <a href="#" class="selected" if (this.filter == all)>
-                 "All" 
-              </a>
+              <a href="#" class="selected" if (this.filter == all)> "All" </a>
               onMouseEvent MouseClick $ _ -> application (this filtering all) render
             </li>
             <li> $
-              <a href="#" class="selected" if (this.filter == active)> 
-                "Active" 
-              </a>
+              <a href="#" class="selected" if (this.filter == active)> "Active" </a>
               onMouseEvent MouseClick $ _ -> application (this filtering active) render
             </li>
             <li> $
-              <a href="#" class="selected" if (this.filter == completed)> 
-                 "Completed"
-              </a>
+              <a href="#" class="selected" if (this.filter == completed)> "Completed" </a>
               onMouseEvent MouseClick $ _ -> application (this filtering completed) render
             </li>
         </ul>
 
     def clearCompletedView : dom =
-        <button id="clear-completed"> 
-            "Clear completed" 
-        </button>            
+        <button id="clear-completed"> "Clear completed" </button>            
         onMouseEvent MouseClick $ _ -> application (this clearCompleted) render
         
     def toggleAllView : dom = 

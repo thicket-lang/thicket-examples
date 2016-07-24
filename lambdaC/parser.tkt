@@ -22,8 +22,8 @@ def termParser : Parser[LambdaTerm,Token] = {
 
 def simpleTermParser : Parser[LambdaTerm,Token] = {
   (tkNumber map Constant)
-| (tkIdent ~ (tkKey "->" ~> termParser ?) map $ p -> p._2 fold (Variable p._1) (Abstraction p._1))
 | ((tkKey"(") ~> termParser <~ (tkKey ")"))
+| (tkIdent ~ (tkKey "->" ~> termParser ?) map $ p -> p._2 fold (Variable p._1) (Abstraction p._1))
 }
 
 def tokenize : string -> try[Sequence[Token]] = {
